@@ -8,7 +8,6 @@
       placeholder="🔍 Zoek product..."
     />
 
-    <!-- EMPTY -->
     <p v-if="filtered.length === 0" class="empty">
       Nog geen producten gevonden
     </p>
@@ -18,8 +17,8 @@
       <!-- EDIT -->
       <div v-if="editId === p.id">
         <input v-model="editName" />
-        <input v-model.number="editPrice" type="number" />
-        <input v-model.number="editMargin" type="number" />
+        <input v-model.number="editCost" type="number" />
+        <input v-model.number="editSell" type="number" />
 
         <button class="btn primary" @click="saveEdit(p.id)">
           Opslaan
@@ -31,11 +30,8 @@
         <img v-if="p.image" :src="p.image" />
 
         <h3>{{ p.name }}</h3>
-        <p>Inkoop: €{{ p.price }}</p>
-
-        <p v-if="p.margin">
-          Verkoop: €{{ calcPrice(p.price, p.margin) }}
-        </p>
+        <p>Inkoop: €{{ p.costPrice }}</p>
+        <p>Verkoop: €{{ p.sellPrice }}</p>
 
         <button class="btn secondary" @click="startEdit(p)">
           ✏️ Bewerken
@@ -64,22 +60,22 @@ const search = ref("");
 
 const editId = ref(null);
 const editName = ref("");
-const editPrice = ref(0);
-const editMargin = ref(0);
+const editCost = ref(0);
+const editSell = ref(0);
 
 function startEdit(p) {
   editId.value = p.id;
   editName.value = p.name;
-  editPrice.value = p.price;
-  editMargin.value = p.margin;
+  editCost.value = p.costPrice;
+  editSell.value = p.sellPrice;
 }
 
 function saveEdit(id) {
   emit("update", {
     id,
     name: editName.value,
-    price: editPrice.value,
-    margin: editMargin.value,
+    costPrice: editCost.value,
+    sellPrice: editSell.value,
   });
 
   editId.value = null;
@@ -96,8 +92,4 @@ const filtered = computed(() =>
     p.name.toLowerCase().includes(search.value.toLowerCase())
   )
 );
-
-function calcPrice(price, margin) {
-  return (price * (1 + margin / 100)).toFixed(2);
-}
 </script>

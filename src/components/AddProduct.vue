@@ -9,12 +9,12 @@
 
     <div class="form-group">
       <label>Inkoopprijs (€)</label>
-      <input v-model.number="price" type="number" />
+      <input v-model.number="costPrice" type="number" />
     </div>
 
     <div class="form-group">
       <label>Verkoopprijs (€)</label>
-      <input v-model.number="margin" type="number" />
+      <input v-model.number="sellPrice" type="number" />
     </div>
 
     <div class="form-group">
@@ -35,8 +35,8 @@ import { ref } from "vue";
 const emit = defineEmits(["add", "nav"]);
 
 const name = ref("");
-const price = ref(0);
-const margin = ref(0);
+const costPrice = ref(0);
+const sellPrice = ref(0);
 const image = ref("");
 
 function handleImage(e) {
@@ -47,18 +47,17 @@ function handleImage(e) {
 }
 
 function save() {
-  if (!name.value || !price.value) return;
+  if (!name.value || !costPrice.value || !sellPrice.value) return;
 
   emit("add", {
     id: Date.now(),
     name: name.value,
-    price: price.value,
-    margin: margin.value,
+    costPrice: costPrice.value,
+    sellPrice: sellPrice.value,
     image: image.value,
   });
 
-  window.scrollTo(0, 0); // UX FIX
-
+  window.scrollTo(0, 0);
   emit("nav", "home");
 }
 </script>
